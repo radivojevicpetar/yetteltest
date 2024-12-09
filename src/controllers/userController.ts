@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { User } from '../models/user';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
-// Create User
 export const createUser = async (req: Request, res: Response, db: any): Promise<void> => {
   const { firstName, lastName, username, email, password, role }: User = req.body;
 
@@ -40,7 +39,6 @@ export const createUser = async (req: Request, res: Response, db: any): Promise<
   }
 };
 
-// Get all Users (For Admin)
 export const getAllUsers = async (req: Request, res: Response, db: any): Promise<void> => {
   const query = 'SELECT id, firstName, lastName, username, email, role FROM users';
   try {
@@ -56,7 +54,6 @@ export const getAllUsers = async (req: Request, res: Response, db: any): Promise
   }
 };
 
-// Update User (Basic and Admin)
 export const updateUser = async (req: Request, res: Response, db: any): Promise<void> => {
   const { firstName, lastName, username, email, password, role }: User = req.body;
   const userId = req.params.id;
@@ -88,7 +85,6 @@ export const updateUser = async (req: Request, res: Response, db: any): Promise<
   }
 };
 
-// Delete User (Admin)
 export const deleteUser = async (req: Request, res: Response, db: any): Promise<void> => {
   const userId = req.params.id;
 
