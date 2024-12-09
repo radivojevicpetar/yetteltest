@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { Task } from '../models/task';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
-// Create Task (User can create their own tasks)
 export const createTask = async (req: Request, res: Response, db: any): Promise<void> => {
   const { body, userId }: Task = req.body;
 
@@ -29,7 +28,6 @@ export const createTask = async (req: Request, res: Response, db: any): Promise<
   }
 };
 
-// Get All Tasks (Admin can list all tasks)
 export const getAllTasks = async (req: Request, res: Response, db: any): Promise<void> => {
   const { order = 'ASC', page = 1, limit = 10 } = req.query;
   const offset = (Number(page) - 1) * Number(limit);
@@ -48,7 +46,6 @@ export const getAllTasks = async (req: Request, res: Response, db: any): Promise
   }
 };
 
-// Update Task (Admin or User can update their tasks)
 export const updateTask = async (req: Request, res: Response, db: any): Promise<void> => {
   const { body }: Task = req.body;
   const taskId = req.params.id;
@@ -81,7 +78,6 @@ export const updateTask = async (req: Request, res: Response, db: any): Promise<
   }
 };
 
-// Delete Task (Admin can delete any task)
 export const deleteTask = async (req: Request, res: Response, db: any): Promise<void> => {
   const taskId = req.params.id;
   const userId = req.body.userId;
