@@ -6,7 +6,7 @@ export const createUser = async (req: Request, res: Response, db: any): Promise<
   const { firstName, lastName, username, email, password, role }: User = req.body;
 
   if (!firstName || !lastName || !username || !email || !password || !role) {
-    res.status(400).send('All fields are required');
+    res.status(400).json({ error: 'All fields are required' });
     return;
   }
 
@@ -15,7 +15,7 @@ export const createUser = async (req: Request, res: Response, db: any): Promise<
     const [results]: [RowDataPacket[]] = await db.query(checkUserQuery, [username, email]);
 
     if (results.length > 0) {
-      res.status(400).send('Username or email already exists');
+      res.status(400).json({ error: 'Username or email already exists' });
       return;
     }
 
@@ -32,10 +32,8 @@ export const createUser = async (req: Request, res: Response, db: any): Promise<
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error('Error creating user:', err.message);
-    } else {
-      console.error('An unknown error occurred:', err);
     }
-    res.status(500).send('Server error');
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -47,10 +45,8 @@ export const getAllUsers = async (req: Request, res: Response, db: any): Promise
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error('Error fetching users:', err.message);
-    } else {
-      console.error('An unknown error occurred:', err);
     }
-    res.status(500).send('Server error');
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -59,7 +55,7 @@ export const updateUser = async (req: Request, res: Response, db: any): Promise<
   const userId = req.params.id;
 
   if (!firstName || !lastName || !username || !email || !password || !role) {
-    res.status(400).send('All fields are required');
+    res.status(400).json({ error: 'All fields are required' });
     return;
   }
 
@@ -68,20 +64,18 @@ export const updateUser = async (req: Request, res: Response, db: any): Promise<
     const [results]: [RowDataPacket[]] = await db.query(checkUserQuery, [username, email, userId]);
 
     if (results.length > 0) {
-      res.status(400).send('Username or email already exists');
+      res.status(400).json({ error: 'Username or email already exists' });
       return;
     }
 
     const updateQuery = 'UPDATE users SET firstName = ?, lastName = ?, username = ?, email = ?, password = ?, role = ? WHERE id = ?';
     await db.query(updateQuery, [firstName, lastName, username, email, password, role, userId]);
-    res.status(200).send('User updated successfully');
+    res.status(200).json({ message: 'User updated successfully' });
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error('Error updating user:', err.message);
-    } else {
-      console.error('An unknown error occurred:', err);
     }
-    res.status(500).send('Server error');
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -91,13 +85,11 @@ export const deleteUser = async (req: Request, res: Response, db: any): Promise<
   const deleteQuery = 'DELETE FROM users WHERE id = ?';
   try {
     await db.query(deleteQuery, [userId]);
-    res.status(200).send('User deleted successfully');
+    res.status(200).json({ message: 'User deleted successfully' });
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error('Error deleting user:', err.message);
-    } else {
-      console.error('An unknown error occurred:', err);
     }
-    res.status(500).send('Server error');
+    res.status(500).json({ error: 'Server error' });
   }
 };
